@@ -23,5 +23,37 @@ flowchart LR
     词法分析程序 -- 源程序 --> 单词编码
 ```
 
+## 实现
+
+**正则**：
+
+```c++
+// 关键字
+keyword = if|then|else|end|repeat|until|read|write
+
+// 专用符号
+symbol = +|-|*|/|%|<|<>|<=|>=|>|=|{|}|;|:=
+
+//digit = 0|1|2|3|4|5|6|7|8|9
+// number
+number = digit digit*(.digit digit*)?
+//letter = a|b|c|d|e|f|g|h|i|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z|A|B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z
+// identifier
+identifier = (_|letter)(_|letter|digit)*
+
+// comment
+comment = {}
+```
+
+`regex.txt`：
+```txt
+keyword=if|then|else|end|repeat|until|read|write
+symbol=+|-|*|/|%|<|<>|<=|>=|>|=|{|}|;|:=
+number=digitdigit*(.digitdigit*)?
+identifier=(_|letter)(_|letter|digit)*
+comment={}
+exit
+```
+
 
 
