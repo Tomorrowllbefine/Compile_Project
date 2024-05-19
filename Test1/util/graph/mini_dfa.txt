@@ -1,0 +1,30 @@
+digraph abc{
+0[fontcolor=white][shape=circle];
+1[fontcolor=white][shape=circle];
+2[fontcolor=white][shape=circle];
+3[fontcolor=white][shape=circle];
+4[fontcolor=white][shape=circle];
+5[fontcolor=white][shape=circle];
+0[fontcolor=black][label=begin];
+0->1[label ="("];
+0->1[label ="<"];
+0->1[label ="/"];
+0->1[label ="-"];
+0->1[label ="*"];
+0->1[label ="+"];
+0->1[label =")"];
+0->1[label =";"];
+0->2[label ="{"];
+0->3[label ="digit"];
+0->4[label ="letter"];
+0->5[label =":"];
+0->1[label ="="];
+1[fontcolor=black][label=acc];
+2->2[label ="~"];
+2->1[label ="}"];
+3[fontcolor=black][label=acc];
+3->3[label ="digit"];
+4[fontcolor=black][label=acc];
+4->4[label ="letter"];
+5->1[label ="="];
+}

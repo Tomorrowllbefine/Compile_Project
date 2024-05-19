@@ -1,0 +1,4 @@
+symbol=\+|-|\*|/|%|<|<>|<=|>=|>|=|;|:=
+number=\digit+
+identifier=\letter(\letter|\digit)*
+comment={~*}
