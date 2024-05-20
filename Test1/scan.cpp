@@ -61,6 +61,7 @@ bool IsOperator2(string op){
     }
     return false;
 }
+
 /**判断是否为分隔符**/
 bool IsSeparater(char ch){
     string tmparr="";

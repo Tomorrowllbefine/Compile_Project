@@ -101,7 +101,6 @@ void MainWindow::on_pushButton_6_clicked()
 
     qDebug()<<"decorated regex: "<< txt;
 
-
 //    //获取编辑框内容
 //    QString qtxt = ui->textEdit->toPlainText();
 //    //QString转string类型
@@ -134,9 +133,9 @@ void MainWindow::on_pushButton_6_clicked()
     minDfaClass.printMinDFA(minDfa);
     this->buildMinDfaTable();
 
-//    AnalyseClass aa;
-//    string codes = aa.getCode(minDfa);
-//    ui->codeText->setText(QString::fromStdString(codes));
+    AnalyseClass aa;
+    string codes = aa.getCode(minDfa);
+    ui->codeText->setText(QString::fromStdString(codes));
 }
 
 
