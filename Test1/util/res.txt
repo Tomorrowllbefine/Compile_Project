@@ -1,0 +1,39 @@
+{ Sample program
+  in TINY language -
+  computes factorial
+}	COMMENT
+read	KEYWORD
+x	IDENTIFIER
+;	SYMBOL
+{ input an integer }	COMMENT
+if	KEYWORD
+0	NUMBER
+<	SYMBOL
+x	IDENTIFIER
+then	KEYWORD
+{ don't compute if x <= 0 }	COMMENT
+fact	IDENTIFIER
+:=	SYMBOL
+1	NUMBER
+;	SYMBOL
+repeat	KEYWORD
+fact	IDENTIFIER
+:=	SYMBOL
+fact	IDENTIFIER
+*	SYMBOL
+x	IDENTIFIER
+;	SYMBOL
+x	IDENTIFIER
+:=	SYMBOL
+x	IDENTIFIER
+-	SYMBOL
+1	NUMBER
+until	KEYWORD
+x	IDENTIFIER
+=	SYMBOL
+0	NUMBER
+;	SYMBOL
+write	KEYWORD
+fact	IDENTIFIER
+{ output factorial of x }	COMMENT
+end	KEYWORD

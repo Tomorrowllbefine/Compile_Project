@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/cpp">
+        <file>scan.cpp</file>
+    </qresource>
+</RCC>
