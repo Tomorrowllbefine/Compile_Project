@@ -24,7 +24,7 @@ flowchart LR
 ```
 **界面**：
 <div align = center>
-    <img src="https://github.com/Tomorrowllbefine/Compile_Project/assets/109293127/a0e15260-52f5-449e-8443-d74e10fe7387">
+    <img src="https://github.com/Tomorrowllbefine/Compile_Project/assets/109293127/8bfe5bf6-6244-4dda-817c-5c58a240003d">
 </div>
 
 
@@ -47,21 +47,31 @@ number = digit digit*(.digit digit*)?
 identifier = (_|letter)(_|letter|digit)*
 
 // comment
-comment = {}
+comment = {~*}
 ```
 
 `regex.txt`：
 ```txt
-keyword=if|then|else|end|repeat|until|read|write
-symbol=+|-|*|/|%|<|<>|<=|>=|>|=|{|}|;|:=
-number=digitdigit*(.digitdigit*)?
-identifier=(_|letter)(_|letter|digit)*
-comment={}
-exit
+symbol=\+|-|\*|/|%|<|<>|<=|>=|>|=|;|:=
+number=\digit+
+identifier=\letter(\letter|\digit)*
+comment={~*}
 ```
 
-**转换**：
+**展示**：
 <div align = center>
-    <img src="https://github.com/Tomorrowllbefine/Compile_Project/assets/109293127/ef957073-8f4d-4a2c-82bf-34a1c2e6c063">
+    <img src="https://github.com/Tomorrowllbefine/Compile_Project/assets/109293127/b681c2e9-7649-4f5c-9a61-7edcb3d222c2">
 </div>
+
+<div align = center>
+    <img src="https://github.com/Tomorrowllbefine/Compile_Project/assets/109293127/e3e05764-1acc-4b0e-b80f-eed2df469232">
+</div>
+
+<div align = center>
+    <img src="https://github.com/Tomorrowllbefine/Compile_Project/assets/109293127/ab1add3d-4700-43b0-8c7f-935b222cd331">
+</div>
+
+---
+
+> 借鉴：
 
