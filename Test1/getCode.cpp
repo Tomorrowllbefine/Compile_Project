@@ -4,7 +4,6 @@
 #include <fstream>
 using namespace std;
 
-
 // 调整缩进
 string getTabs(int n)
 {
@@ -51,7 +50,11 @@ void getSwitchCharCodes(DFA minDfa, vector<string>& lines, int& tab, int curStat
             next_state = minDfa.trans[curState][index];
         }
     }
-
+    // 检查digit
+    bool flag_digit = false;
+    bool flag_letter = false;
+    int next_digit = -1; // 下一状态
+    int next_letter = -1; // 下一状态
     if(flag_comment)
     {// 特殊处理
         lines.push_back(getTabs(tab) + "if (ch == '}') {");
@@ -75,15 +78,28 @@ void getSwitchCharCodes(DFA minDfa, vector<string>& lines, int& tab, int curStat
             if(next != -1)
             {// 下一跳存在
                 char real_char = letterTOword[string(1,ab_char)][0]; // 获取当前吸收字符真实字母
+                if(real_char == 'd' || real_char == 'l'){
+                    if(real_char == 'd') {
+                        flag_digit = true;
+                        next_digit = next;
+                    }
+                    else{
+                        next_letter = next;
+                        flag_letter = true;
+                    }
+                    continue; // 跳过最后处理
+                }
                 cout<<"Test real_char: "<<real_char<<endl;
                 lines.push_back(getTabs(tab) + "case '" + real_char + "':");
                 tab++;
                 if(IsLongestMatchChar(real_char))
                 {
                     lines.push_back(getTabs(tab) + "state = " + to_string(next) + ";");
+                    lines.push_back(getTabs(tab) + "fgetpos(file, &pos);");
                     lines.push_back(getTabs(tab) + "next = fgetc(file);");
                     lines.push_back(getTabs(tab) + "longestMatch = IsLongestMatch(ch, next); // 判断是否需要最长匹配");
-                    lines.push_back(getTabs(tab) + "fseek(file, -1L, SEEK_CUR); // 回退");
+                    // lines.push_back(getTabs(tab) + "fseek(file, -1L, SEEK_CUR); // 回退");
+                    lines.push_back(getTabs(tab) + "fsetpos(file, &pos); // 回退");
                     lines.push_back(getTabs(tab) + "break;");
                 }else{
                     lines.push_back(getTabs(tab) + "state = " + to_string(next) + ";");
@@ -94,7 +110,32 @@ void getSwitchCharCodes(DFA minDfa, vector<string>& lines, int& tab, int curStat
         }
         // default统一处理非吸收符
         lines.push_back(getTabs(tab) + "default:");
-        lines.push_back(getTabs(tab+1) + "error = true;");
+        if(flag_digit){
+            tab++;
+            lines.push_back(getTabs(tab) + "if (isdigit(ch)) {");
+            lines.push_back(getTabs(tab) + "state =" + to_string(next_digit) + ";");
+            lines.push_back(getTabs(tab) + "fgetpos(file, &pos);");
+            lines.push_back(getTabs(tab) + "next = fgetc(file);");
+            lines.push_back(getTabs(tab) + "longestMatch = IsLongestMatch(ch, next); // 判断是否需要最长匹配");
+            // lines.push_back(getTabs(tab) + "fseek(file, -1L, SEEK_CUR); // 回退");
+            lines.push_back(getTabs(tab) + "fsetpos(file, &pos); // 回退");
+            tab--;
+            lines.push_back(getTabs(tab) + "}");
+        }
+        if(flag_letter){
+            tab++;
+            lines.push_back(getTabs(tab) + "if (isalpha(ch)) {");
+            lines.push_back(getTabs(tab) + "state =" + to_string(next_letter) + ";");
+            lines.push_back(getTabs(tab) + "fgetpos(file, &pos);");
+            lines.push_back(getTabs(tab) + "next = fgetc(file);");
+            lines.push_back(getTabs(tab) + "longestMatch = IsLongestMatch(ch, next); // 判断是否需要最长匹配");
+            // lines.push_back(getTabs(tab) + "fseek(file, -1L, SEEK_CUR); // 回退");
+            lines.push_back(getTabs(tab) + "fsetpos(file, &pos); // 回退");
+            tab--;
+            lines.push_back(getTabs(tab) + "}");
+        }
+        if(!flag_digit && !flag_letter)
+            lines.push_back(getTabs(tab+1) + "error = true;");
         lines.push_back(getTabs(tab) + "}// end ch_switch");
     }
 
@@ -131,6 +172,7 @@ void getWhileInCodes(DFA minDfa, vector<string>& lines, int& tab)
     lines.push_back(getTabs(tab) + "{");
     tab++;
     lines.push_back(getTabs(tab) + "longestMatch = false; // 重置");
+    // 外层switch
     getSwitchStateCodes(minDfa, lines, tab);
     lines.push_back(getTabs(tab) + "token[token_size].push_back(ch); // 吸收当前字符");
     lines.push_back(getTabs(tab) + "if (error == true) break;");
@@ -144,11 +186,16 @@ void getWhileOutCodes(DFA minDfa, vector<string>& lines, int& tab)
     int start_state = minDfa.startState; // 初始状态编号
     IntSet end_state = minDfa.endStates; // 接收状态编号
     lines.push_back("\n");
-    lines.push_back(getTabs(tab) + "while ((ch= fgetc(file)) != EOF)"); // 外层循环
+    lines.push_back(getTabs(tab) + "while (ch != EOF)"); // 外层循环
     lines.push_back(getTabs(tab) + "{");
     tab++;
-    lines.push_back(getTabs(tab) + "if(!IsFilter(ch)) fseek(file, -1L, SEEK_CUR); // 非过滤回退");
-    lines.push_back(getTabs(tab) + "token.push_back("");");
+    lines.push_back(getTabs(tab) + "while (IsFilter(ch)) {");
+    lines.push_back(getTabs(tab) + "fgetpos(file, &pos);");
+    lines.push_back(getTabs(tab+1) + "ch = fgetc(file);");
+    lines.push_back(getTabs(tab) + "}");
+    lines.push_back(getTabs(tab) + "fsetpos(file, &pos); // 非过滤回退\n");
+
+    lines.push_back(getTabs(tab) + "token.push_back(\"\");");
     lines.push_back(getTabs(tab) + "char next = ' ';");
     lines.push_back(getTabs(tab) + "state = " + to_string(start_state) + "; // 重置状态");
     // 获取内存循环代码
@@ -174,6 +221,8 @@ void getWhileOutCodes(DFA minDfa, vector<string>& lines, int& tab)
         }
         type_size++;
         token_size ++;
+        fgetpos(file, &pos);
+        ch = fgetc(file);
 )";
     lines.push_back(judgeType_code);
     tab--;
@@ -193,8 +242,7 @@ string AnalyseClass::getCode(DFA minDfa)
     int tab = 0;
 	
     // 处理前缀
-    std::string head = R"(
-#include<iostream>
+    std::string head = R"(#include<iostream>
 #include<vector>
 #include<string>
 #include<fstream>
@@ -340,7 +388,7 @@ bool IsLongestMatch(char cur, char next)
 // 输出内容
 void output()
 {
-    std::ofstream outfile("res.txt");
+    std::ofstream outfile("analyse_res.txt");
 
     // 检查文件是否成功打开
     if (!outfile.is_open()) {
@@ -375,12 +423,16 @@ void output()
     lines.push_back(getTabs(tab) + "char ch = ' ';");
     lines.push_back(getTabs(tab) + "bool error = false;");
     lines.push_back(getTabs(tab) + "bool longestMatch = false;");
-    lines.push_back(getTabs(tab) + "FILE* file = NULL;");
-    lines.push_back(getTabs(tab) + "fopen_s(&file,\"tiny_test.txt\", \"r\");");
+    //lines.push_back(getTabs(tab) + "FILE* file = NULL;");
+    lines.push_back(getTabs(tab) + "fpos_t pos; // 注意：fpos_t 是用于保存文件位置的适当类型 ");
+    //lines.push_back(getTabs(tab) + "fopen_s(&file,\"tiny_test.txt\", \"r\");");
+    lines.push_back(getTabs(tab) + "FILE* file = fopen(\"example.txt\", \"r\");");
     lines.push_back(getTabs(tab) + "if (file == NULL) {");
     lines.push_back(getTabs(tab+1) + "perror(\"Error opening file\");");
     lines.push_back(getTabs(tab+1) + "return 1;");
     lines.push_back(getTabs(tab) + "}");
+    lines.push_back(getTabs(tab) + "fgetpos(file, &pos);");
+    lines.push_back(getTabs(tab) + "ch = fgetc(file);");
 
     // while循环处理
     getWhileOutCodes(minDfa, lines, tab);
@@ -392,7 +444,7 @@ void output()
     tab--;
     lines.push_back(getTabs(tab) + "}");
 
-    std::ofstream file("output.txt", std::ios::binary);
+    std::ofstream file("analyse_code.cpp", std::ios::binary);
     for (string line : lines)
     {
         codes += line;

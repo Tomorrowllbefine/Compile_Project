@@ -93,6 +93,10 @@ string MainWindow::getRegex(vector<string> inputLines)
  */
 void MainWindow::on_pushButton_6_clicked()
 {
+    if(ui->textEdit->toPlainText().isEmpty()){
+        QMessageBox::information(this, "错误", "请先输入正则表达式!");
+        return;
+    }
     ui->label_graph->clear();
     // 获取输入行
     vector<string> inputLines = getInputLines();
@@ -136,6 +140,9 @@ void MainWindow::on_pushButton_6_clicked()
     AnalyseClass aa;
     string codes = aa.getCode(minDfa);
     ui->codeText->setText(QString::fromStdString(codes));
+    QMessageBox::information(this, "提示", "生成完毕!\n"
+                                             "词法分析程序已保存至当前文件夹下analyse_code.cpp中");
+
 }
 
 
@@ -427,6 +434,10 @@ void MainWindow::buildMinDfaTable()
  */
 void MainWindow::on_pushButton_clicked()
 {
+    if(ui->textEdit->toPlainText().isEmpty()){
+        QMessageBox::information(this, "错误", "请先输入正则表达式!");
+        return;
+    }
     QFile file("nfa.txt");
     QString filePath = QFileInfo(file).absoluteFilePath();
     //cout<<filePath.toStdString()<<endl;
@@ -461,6 +472,10 @@ void MainWindow::on_pushButton_clicked()
  */
 void MainWindow::on_pushButton_2_clicked()
 {
+    if(ui->textEdit->toPlainText().isEmpty()){
+        QMessageBox::information(this, "错误", "请先输入正则表达式!");
+        return;
+    }
     QFile file("dfa.txt");
     QString filePath = QFileInfo(file).absoluteFilePath();
     //cout<<filePath.toStdString()<<endl;
@@ -492,6 +507,10 @@ void MainWindow::on_pushButton_2_clicked()
  */
 void MainWindow::on_pushButton_3_clicked()
 {
+    if(ui->textEdit->toPlainText().isEmpty()){
+        QMessageBox::information(this, "错误", "请先输入正则表达式!");
+        return;
+    }
     QFile file("minidfa.txt");
     QString filePath = QFileInfo(file).absoluteFilePath();
     //cout<<filePath.toStdString()<<endl;

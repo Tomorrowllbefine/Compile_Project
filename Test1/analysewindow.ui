@@ -7,31 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>1061</width>
-    <height>801</height>
+    <height>763</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QToolButton" name="btn_save">
-    <property name="geometry">
-     <rect>
-      <x>270</x>
-      <y>30</y>
-      <width>131</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>10</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>保存</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
@@ -68,21 +50,11 @@
      <string>展示分析结果</string>
     </property>
    </widget>
-   <widget class="QComboBox" name="cbBox_src">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>130</y>
-      <width>131</width>
-      <height>31</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QToolButton" name="btn_choose_src">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>90</y>
+      <x>20</x>
+      <y>20</y>
       <width>131</width>
       <height>41</height>
      </rect>
@@ -132,21 +104,11 @@
      <string>词法分析程序！！</string>
     </property>
    </widget>
-   <widget class="QComboBox" name="cbBox_scan">
-    <property name="geometry">
-     <rect>
-      <x>270</x>
-      <y>70</y>
-      <width>131</width>
-      <height>31</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>180</y>
+      <y>80</y>
       <width>71</width>
       <height>20</height>
      </rect>
@@ -164,10 +126,28 @@
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>210</y>
+      <y>110</y>
       <width>401</width>
-      <height>511</height>
+      <height>611</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="QToolButton" name="btn_choose_src_2">
+    <property name="geometry">
+     <rect>
+      <x>890</x>
+      <y>20</y>
+      <width>131</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>退出</string>
     </property>
    </widget>
   </widget>
